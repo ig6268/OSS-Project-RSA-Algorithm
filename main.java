@@ -3,71 +3,75 @@ package rsa;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.math.*; // BigIntegerì‚¬ìš©ì„ ìœ„í•´ 
+import java.util.Random;
+
+
+
 
 public class main extends JFrame{
 	JLabel state;
 	JTextArea txt_area;
-	static int m;//Æò¹® m
-	static String c;// ¾ÏÈ£¹®
-	static String e;// °ø°³Å°
-	static String d;// °³ÀÎÅ°
+	static int m;//í‰ë¬¸ m
+	static String c;// ì•”í˜¸ë¬¸
+	static String e;// ê³µê°œí‚¤
+	static String d;// ê°œì¸í‚¤
 	static String n;// n = p*q
-	static String pi;// ¿ÀÀÏ·¯ ÆÄÀÌÇÔ¼ö (p-1)*(q-1)
-	static int p;// ÀÓÀÇÀÇ ¼Ò¼öp
-	static int q;// ÀÓÀÇÀÇ ¼Ò¼öq
+	static String pi;// ì˜¤ì¼ëŸ¬ íŒŒì´í•¨ìˆ˜ (p-1)*(q-1)
+	static int p;// ì„ì˜ì˜ ì†Œìˆ˜p
+	static int q;// ì„ì˜ì˜ ì†Œìˆ˜q
 	
-	public main() { // guiºÎºĞ
-		setTitle("RSAÅ°»ı¼º");
+	public main() { // guië¶€ë¶„
+		setTitle("RSAí‚¤ìƒì„±");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLayout(new BorderLayout());
 		
 		JPanel Btn_panel = new JPanel();
 		Btn_panel.setLayout(new FlowLayout());
-		JButton btn1 = new JButton ("¾ÏÈ£È­");
-		JButton btn2 = new JButton ("º¹È£È­");
-		JButton btn3 = new JButton ("Å°»ı¼º");
+		JButton btn1 = new JButton ("ì•”í˜¸í™”");
+		JButton btn2 = new JButton ("ë³µí˜¸í™”");
+		JButton btn3 = new JButton ("í‚¤ìƒì„±");
 		JTextField tf1 = new JTextField(10);
 		
 		Btn_panel.add(btn1);
 		Btn_panel.add(btn2);
-		Btn_panel.add(new JLabel("Æò¹®°ª(2~50»çÀÌÀÇ Á¤¼ö°ª)"));
+		Btn_panel.add(new JLabel("í‰ë¬¸ê°’(2~50ì‚¬ì´ì˜ ì •ìˆ˜ê°’)"));
 		Btn_panel.add(tf1);
 		Btn_panel.add(btn3);
 		
-		btn1.addActionListener(new ActionListener() { // ¾ÏÈ£È­ ¹öÆ°
+		btn1.addActionListener(new ActionListener() { // ì•”í˜¸í™” ë²„íŠ¼
 			//@Override
 			public void actionPerformed(ActionEvent e) {
 				
 			}
 		});
-		btn2.addActionListener(new ActionListener() { //º¹È£È­ ¹öÆ°
+		btn2.addActionListener(new ActionListener() { //ë³µí˜¸í™” ë²„íŠ¼
 			//@Override
 			public void actionPerformed(ActionEvent e) {
 				
 				
 			}
 		});
-		btn3.addActionListener(new ActionListener() { //Å° »ı¼º ¹öÆ°
+		btn3.addActionListener(new ActionListener() { //í‚¤ ìƒì„± ë²„íŠ¼
 			//@Override
 			public void actionPerformed(ActionEvent e) {
 				
 					m = new Integer(tf1.getText());
-					txt_area.setText("Æò¹®°ª : "+ m+"\n");
+					txt_area.setText("í‰ë¬¸ê°’ : "+ m+"\n");
 
 					if(m<2 || m>50)
 					{
-						txt_area.setText("¡Ø2~50»çÀÌÀÇ Á¤¼ö°ªÀÌ ¾Æ´Õ´Ï´Ù.\n");
+						txt_area.setText("â€»2~50ì‚¬ì´ì˜ ì •ìˆ˜ê°’ì´ ì•„ë‹™ë‹ˆë‹¤.\n");
 					}
 					
-				
-				//Å°»ı¼º ÇÔ¼ö
+				//í‚¤ìƒì„± í•¨ìˆ˜
 				create();
 			}
 		});
 
-		// ÇÁ·Î±×·¥ Æ²
+		// í”„ë¡œê·¸ë¨ í‹€
 		state = new JLabel(); 
-		state.setText("RSA Å°»ç¿ë ¾Ï,º¹È£È­");
+		state.setText("RSA í‚¤ì‚¬ìš© ì•”,ë³µí˜¸í™”");
 		txt_area = new JTextArea();
 		add(txt_area, BorderLayout.CENTER);
 		add(Btn_panel, BorderLayout.SOUTH);
@@ -75,10 +79,27 @@ public class main extends JFrame{
 		setVisible(true);
 	}
 	
-	public void create() { // Å° »ı¼º ÇÔ¼ö
-
+	public void create() { // í‚¤ ìƒì„± í•¨ìˆ˜
+		p = getRandomNum(1,100);
+		q = getRandomNum(1,100);
+		if(p == q)
+		{
+			create();
+		}
+		txt_area.append("ì„ì˜ì˜ ë‘ ì†Œìˆ˜ p,q = "+p+" , "+q+"\n");
 	}
-
+	
+	//ì„ì˜ì˜ ìˆ˜ pì™€ që¥¼ ë°˜í™˜í•˜ëŠ” ë©”ì†Œë“œ
+	public static int getRandomNum(int startNum, int endNum)
+	{
+		while(true)
+		{
+			Random random = new Random();
+			int tempRange = endNum - startNum; // ìƒì„±ë²”ìœ„ëŠ” ëìˆ˜ - ì²˜ìŒìˆ˜
+			int result = (int)(random.nextDouble() * tempRange + startNum);
+			return result;
+		}
+	}
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		new main();
