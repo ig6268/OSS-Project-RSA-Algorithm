@@ -97,7 +97,33 @@ public class main extends JFrame{
 			Random random = new Random();
 			int tempRange = endNum - startNum; // 생성범위는 끝수 - 처음수
 			int result = (int)(random.nextDouble() * tempRange + startNum);
+			isPN(result);
 			return result;
+		}
+	}
+	public static boolean isPN(int num)
+	{
+		int t1 = num-1;
+		int t2 = 2;
+		
+		while(t2 <= t1)
+		{
+			if(num%t2==0) // 인자값 num이 나누어 떨어지는지 확인한다.
+			{
+				break;
+			}
+			else
+			{
+				t2++;
+			}
+		}
+		if(t2 > t1)
+		{
+			return true; // 소수
+		}
+		else
+		{
+			return false; // 소수가 아닙니다.
 		}
 	}
 	public static void main(String[] args) {
