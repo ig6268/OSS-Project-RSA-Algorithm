@@ -16,10 +16,11 @@ public class main extends JFrame{
 	static String c;// 암호문
 	static String e;// 공개키
 	static String d;// 개인키
-	static String n;// n = p*q
+	static int n = 0;// n = p*q
 	static String pi;// 오일러 파이함수 (p-1)*(q-1)
-	static int p;// 임의의 소수p
-	static int q;// 임의의 소수q
+	static int p=0;// 임의의 소수p
+	static int q=0;// 임의의 소수q
+	static int t = 0;// 최대공약수
 	
 	public main() { // gui부분
 		setTitle("RSA키생성");
@@ -87,6 +88,11 @@ public class main extends JFrame{
 			create();
 		}
 		txt_area.append("임의의 두 소수 p,q = "+p+" , "+q+"\n");
+		n = (p * q);
+		txt_area.append("n값 = " + p+" X "+q+"= "+ n + "\n");
+		GCD(p,q);
+		txt_area.append("gcd("+p+","+q+") = "+t+"\n");
+		
 	}
 	
 	//임의의 수 p와 q를 반환하는 메소드
@@ -125,6 +131,27 @@ public class main extends JFrame{
 		{
 			return false; // 소수가 아닙니다.
 		}
+	}
+	
+		public static int GCD(int n1, int n2)
+	{
+		//static int t = 0;
+		
+		if(n1 < n2)
+		{
+			t = n1;
+			n1 = n2;
+			n2 = t;
+		}
+		t = n2;
+		
+		while(true)
+		{
+			if(n1%t ==0 && n2%t ==0)
+				return t;
+			t--;
+		}
+		
 	}
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
