@@ -88,8 +88,10 @@ public class main extends JFrame{
 			create();
 		}
 		txt_area.append("임의의 두 소수 p,q = "+p+" , "+q+"\n");
+		
 		n = (p * q);
 		txt_area.append("n값 = " + p+" X "+q+"= "+ n + "\n");
+		
 		GCD(p,q);
 		txt_area.append("gcd("+p+","+q+") = "+t+"\n");
 		
@@ -143,6 +145,7 @@ public class main extends JFrame{
 			n1 = n2;
 			n2 = t;
 		}
+			
 		t = n2;
 		
 		while(true)
