@@ -4,8 +4,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.Random;
-
-
+//import java.io.*;
+//import java.lang.*;
 
 
 public class main extends JFrame{
@@ -58,14 +58,15 @@ public class main extends JFrame{
 				
 					m = new Integer(tf1.getText());
 					txt_area.setText("평문값 : "+ m+"\n");
-
-					if(m<2 || m>50)
+					
+					if(m<2 || m>50)//m값이 다를때는 경고문구 출력
 					{
 						txt_area.setText("※2~50사이의 정수값이 아닙니다.\n");
 					}
-					
-				//키생성 함수 호출
-				create();
+					else if(m>=2 && m<=50)//2에서 50까지의 수일때만 함수출력
+					{
+						create();
+					}
 			}
 		});
 
@@ -75,13 +76,14 @@ public class main extends JFrame{
 		txt_area = new JTextArea();
 		add(txt_area, BorderLayout.CENTER);
 		add(Btn_panel, BorderLayout.SOUTH);
+		//setLayout(new GridLayout(1,5));
 		setSize(600, 600);
 		setVisible(true);
 	}
 	
 	public void create() { // 키 생성 함수
-		p = getRandomNum(1,100);
-		q = getRandomNum(1,100);
+		p = getRandomNum(1,100,true); // p,q를 생성할때 판별을 위해 t/f추가
+		q = getRandomNum(1,100,true);
 		if(p == q)
 		{
 			create();
@@ -99,18 +101,29 @@ public class main extends JFrame{
 	}
 	
 	//임의의 수 p와 q를 반환하는 메소드
-	public static int getRandomNum(int startNum, int endNum)
+	public static int getRandomNum(int sNum, int eNum, boolean PNum)
 	{
 		while(true)
 		{
 			Random random = new Random();
-			int tempRange = endNum - startNum; // 생성범위는 끝수 - 처음수
-			int result = (int)(random.nextDouble() * tempRange + startNum);
-			isPN(result);
-			return result;
+			int tempRange = eNum - sNum; // 생성범위는 끝수 - 처음수
+			int result = (int)(random.nextDouble() * tempRange + sNum);
+			
+			if(PNum) //true를 포함할때만 소수를 판별 ex)p,q
+			{
+				if(PN(result))
+				{
+					return result;
+				}
+			}
+			else //소수가 아닌 랜덤한 값이 필요할때 false ex)e값
+			{
+				return result;
+			}
 		}
 	}
-	public static boolean isPN(int num)//prime number 소수
+	//소수 판별기
+	public static boolean PN(int num)//prime number 소수
 	{
 		int t1 = num-1;
 		int t2 = 2;
@@ -123,7 +136,7 @@ public class main extends JFrame{
 			}
 			else
 			{
-				t2++;
+				t2++; // 안나누어 떨어지면 +1
 			}
 		}
 		if(t2 > t1)
@@ -136,23 +149,22 @@ public class main extends JFrame{
 		}
 	}
 	
-		public static int GCD(int n1, int n2)// =gcd(n1,n2)
+	public static int GCD(int n1, int n2) // =gcd(n1,n2)
 	{
 		//static int t = 0;
 		
-		if(n1 < n2)// n1과 n2를 정리
+		if(n1 < n2) // n1과 n2를 정리
 		{
 			t = n1;
 			n1 = n2;
 			n2 = t;
 		}
-			
-		t = n2;//나누는 수를 n2로 잡음
+		t = n2; //나누는 수를 n2로 잡음
 		
 		while(true)
 		{
 			if(n1%t ==0 && n2%t ==0) // n1을 나눠서 0이되고 n2를 나눠서 
-				return t;       //  나머지가 0이될때까지 나눔
+				return t;			//  나머지가 0이될때까지 나눔
 			t--;// 위 조건을 만족 못하면 -1씩 줄이면서 될때까지 반복
 		}
 		
