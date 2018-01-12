@@ -3,7 +3,6 @@ package rsa;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.math.*; // BigInteger사용을 위해 
 import java.util.Random;
 
 
@@ -17,7 +16,7 @@ public class main extends JFrame{
 	static String e;// 공개키
 	static String d;// 개인키
 	static int n = 0;// n = p*q
-	static String pi;// 오일러 파이함수 (p-1)*(q-1)
+	static int pi;// 오일러 파이함수 (p-1)*(q-1)
 	static int p=0;// 임의의 소수p
 	static int q=0;// 임의의 소수q
 	static int t = 0;// 최대공약수
@@ -65,7 +64,7 @@ public class main extends JFrame{
 						txt_area.setText("※2~50사이의 정수값이 아닙니다.\n");
 					}
 					
-				//키생성 함수
+				//키생성 함수 호출
 				create();
 			}
 		});
@@ -95,6 +94,8 @@ public class main extends JFrame{
 		GCD(p,q);
 		txt_area.append("gcd("+p+","+q+") = "+t+"\n");
 		
+		pi = (p-1)*(q-1); //오일러 파이 pi
+		txt_area.append("pi = (p-1) * (q-1) =  "+pi + "\n");
 	}
 	
 	//임의의 수 p와 q를 반환하는 메소드
@@ -109,7 +110,7 @@ public class main extends JFrame{
 			return result;
 		}
 	}
-	public static boolean isPN(int num)
+	public static boolean isPN(int num)//prime number 소수
 	{
 		int t1 = num-1;
 		int t2 = 2;
@@ -135,24 +136,24 @@ public class main extends JFrame{
 		}
 	}
 	
-		public static int GCD(int n1, int n2)
+		public static int GCD(int n1, int n2)// =gcd(n1,n2)
 	{
 		//static int t = 0;
 		
-		if(n1 < n2)
+		if(n1 < n2)// n1과 n2를 정리
 		{
 			t = n1;
 			n1 = n2;
 			n2 = t;
 		}
 			
-		t = n2;
+		t = n2;//나누는 수를 n2로 잡음
 		
 		while(true)
 		{
-			if(n1%t ==0 && n2%t ==0)
-				return t;
-			t--;
+			if(n1%t ==0 && n2%t ==0) // n1을 나눠서 0이되고 n2를 나눠서 
+				return t;       //  나머지가 0이될때까지 나눔
+			t--;// 위 조건을 만족 못하면 -1씩 줄이면서 될때까지 반복
 		}
 		
 	}
