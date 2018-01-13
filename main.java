@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.Random;
+import java.math.*;
 //import java.io.*;
 //import java.lang.*;
 
@@ -12,9 +13,9 @@ public class main extends JFrame{
 	JLabel state;
 	JTextArea txt_area;
 	static int m;//평문 m
-	static String c;// 암호문
-	static String e;// 공개키
-	static String d;// 개인키
+	static int c;// 암호문
+	static int e;// 공개키
+	static int d;// 개인키
 	static int n = 0;// n = p*q
 	static int pi;// 오일러 파이함수 (p-1)*(q-1)
 	static int p=0;// 임의의 소수p
@@ -33,11 +34,11 @@ public class main extends JFrame{
 		JButton btn3 = new JButton ("키생성");
 		JTextField tf1 = new JTextField(10);
 		
-		Btn_panel.add(btn1);
-		Btn_panel.add(btn2);
 		Btn_panel.add(new JLabel("평문값(2~50사이의 정수값)"));
 		Btn_panel.add(tf1);
 		Btn_panel.add(btn3);
+		Btn_panel.add(btn1);
+		Btn_panel.add(btn2);	
 		
 		btn1.addActionListener(new ActionListener() { // 암호화 버튼
 			//@Override
@@ -71,19 +72,19 @@ public class main extends JFrame{
 		});
 
 		// 프로그램 틀
-		state = new JLabel(); 
-		state.setText("RSA 키사용 암,복호화");
+		//state = new JLabel(); 
+		//state.setText("RSA 키사용 암,복호화");
 		txt_area = new JTextArea();
 		add(txt_area, BorderLayout.CENTER);
 		add(Btn_panel, BorderLayout.SOUTH);
-		//setLayout(new GridLayout(1,5));
-		setSize(600, 600);
+		//setLayout(new GridLayout(2,0));
+		setSize(530, 400);
 		setVisible(true);
 	}
 	
 	public void create() { // 키 생성 함수
-		p = getRandomNum(1,100,true); // p,q를 생성할때 판별을 위해 t/f추가
-		q = getRandomNum(1,100,true);
+		p = getRandomNum(2,100,true); // p,q를 생성할때 판별을 위해 t/f추가
+		q = getRandomNum(2,100,true);
 		if(p == q)
 		{
 			create();
@@ -93,11 +94,15 @@ public class main extends JFrame{
 		n = (p * q);
 		txt_area.append("n값 = " + p+" X "+q+"= "+ n + "\n");
 		
-		GCD(p,q);
-		txt_area.append("gcd("+p+","+q+") = "+t+"\n");
-		
 		pi = (p-1)*(q-1); //오일러 파이 pi
+		
 		txt_area.append("pi = (p-1) * (q-1) =  "+pi + "\n");
+		
+		e = publickey(pi,n); 
+		txt_area.append("e값 = " + e + "\n");
+		
+		GCD(pi,e);
+		txt_area.append("gcd("+pi+","+e+") = "+t+"\n");
 	}
 	
 	//임의의 수 p와 q를 반환하는 메소드
@@ -108,6 +113,7 @@ public class main extends JFrame{
 			Random random = new Random();
 			int tempRange = eNum - sNum; // 생성범위는 끝수 - 처음수
 			int result = (int)(random.nextDouble() * tempRange + sNum);
+
 			
 			if(PNum) //true를 포함할때만 소수를 판별 ex)p,q
 			{
@@ -151,7 +157,6 @@ public class main extends JFrame{
 	
 	public static int GCD(int n1, int n2) // =gcd(n1,n2)
 	{
-		//static int t = 0;
 		
 		if(n1 < n2) // n1과 n2를 정리
 		{
@@ -169,6 +174,24 @@ public class main extends JFrame{
 		}
 		
 	}
+	//공개키 값 e를 구하기 위한 함수
+	public static int publickey(int pi, int n)
+	{
+		int a = getRandomNum(2,pi,false); // 2보다 크면서 오일러pi보다 작은 정수 e선택
+		int e = a; //어떤값이 잡힐지 모르기때문에 a에 담음
+		
+		while(GCD(a,pi) != 1 ) //gcd가 1이 아니면 a값을 줄이면서 확인
+		{
+			a--;
+			if(GCD(a,pi) == 1) // gcd가 1이면 e에 a값을 저장
+			{
+				e=a;
+				break;
+			}
+		}
+		return e; 
+	}
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		new main();
