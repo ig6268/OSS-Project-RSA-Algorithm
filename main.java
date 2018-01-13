@@ -5,8 +5,6 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.util.Random;
 import java.math.*;
-//import java.io.*;
-//import java.lang.*;
 
 
 public class main extends JFrame{
@@ -72,8 +70,6 @@ public class main extends JFrame{
 		});
 
 		// 프로그램 틀
-		//state = new JLabel(); 
-		//state.setText("RSA 키사용 암,복호화");
 		txt_area = new JTextArea();
 		add(txt_area, BorderLayout.CENTER);
 		add(Btn_panel, BorderLayout.SOUTH);
@@ -111,8 +107,7 @@ public class main extends JFrame{
 		while(true)
 		{
 			Random random = new Random();
-			int tempRange = eNum - sNum; // 생성범위는 끝수 - 처음수
-			int result = (int)(random.nextDouble() * tempRange + sNum);
+			int result = (int)(Math.random()*eNum+1);
 
 			
 			if(PNum) //true를 포함할때만 소수를 판별 ex)p,q
