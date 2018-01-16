@@ -5,6 +5,8 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.util.Random;
 import java.math.*;
+//import java.io.*;
+//import java.lang.*;
 
 
 public class main extends JFrame{
@@ -40,20 +42,23 @@ public class main extends JFrame{
 		
 		btn1.addActionListener(new ActionListener() { // 암호화 버튼
 			//@Override
-			public void actionPerformed(ActionEvent e) {
-				
+			public void actionPerformed(ActionEvent aa) {
+				c = decode(m,e,n);
+				txt_area.append("---------------------------------------------" + "\n");
+				txt_area.append("암호문 C = "+c+"\n");
 			}
 		});
 		btn2.addActionListener(new ActionListener() { //복호화 버튼
 			//@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent aa) {
 				
-				
+				txt_area.append("---------------------------------------------" + "\n");
+				txt_area.append("평문 M = "+ m +"\n");
 			}
 		});
 		btn3.addActionListener(new ActionListener() { //키 생성 버튼
 			//@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent aa) {
 				
 					m = new Integer(tf1.getText());
 					txt_area.setText("평문값 : "+ m+"\n");
@@ -70,7 +75,10 @@ public class main extends JFrame{
 		});
 
 		// 프로그램 틀
+		//state = new JLabel(); 
+		//state.setText("RSA 키사용 암,복호화");
 		txt_area = new JTextArea();
+		txt_area.setFont(new Font("바탕체",Font.BOLD,20));//글자크기 조절
 		add(txt_area, BorderLayout.CENTER);
 		add(Btn_panel, BorderLayout.SOUTH);
 		//setLayout(new GridLayout(2,0));
@@ -85,20 +93,23 @@ public class main extends JFrame{
 		{
 			create();
 		}
-		txt_area.append("임의의 두 소수 p,q = "+p+" , "+q+"\n");
+		txt_area.append("p,q = "+p+" , "+q+"\n");
 		
 		n = (p * q);
-		txt_area.append("n값 = " + p+" X "+q+"= "+ n + "\n");
+		txt_area.append("n = " +  n + "\n"); 
 		
 		pi = (p-1)*(q-1); //오일러 파이 pi
 		
-		txt_area.append("pi = (p-1) * (q-1) =  "+pi + "\n");
+		txt_area.append("pi = "+pi + "\n");
 		
 		e = publickey(pi,n); 
 		txt_area.append("e값 = " + e + "\n");
 		
-		GCD(pi,e);
-		txt_area.append("gcd("+pi+","+e+") = "+t+"\n");
+		//GCD(pi,e);
+		//txt_area.append("gcd("+pi+","+e+") = "+t+"\n");
+		 
+		txt_area.append("공개키 값 = {"+e+","+n+"}\n");
+		//txt_area.append("개인키 값 = {"+d+","+n+"}\n");
 	}
 	
 	//임의의 수 p와 q를 반환하는 메소드
@@ -107,7 +118,8 @@ public class main extends JFrame{
 		while(true)
 		{
 			Random random = new Random();
-			int result = (int)(Math.random()*eNum+1);
+			int tempRange = eNum - sNum; // 생성범위는 끝수 - 처음수
+			int result = (int)(random.nextDouble() * tempRange + sNum);
 
 			
 			if(PNum) //true를 포함할때만 소수를 판별 ex)p,q
@@ -185,6 +197,17 @@ public class main extends JFrame{
 			}
 		}
 		return e; 
+	}
+	
+	public static int decode(int a1, int a2, int a3)
+	{	
+		int result = a1;
+		
+		for(int i=1; i<a2; i++)
+		{
+			result = (result * a1) % a3;
+		}
+		return result;
 	}
 	
 	public static void main(String[] args) {
