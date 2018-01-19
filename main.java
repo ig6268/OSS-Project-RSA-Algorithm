@@ -93,6 +93,7 @@ public class main extends JFrame{
 		add(Btn_panel, BorderLayout.SOUTH);
 		//setLayout(new GridLayout(2,0));
 		setSize(550, 400);
+		setLocation(700,400);
 		setVisible(true);
 	}
 	
