@@ -58,7 +58,7 @@ class start_Sub extends JFrame implements ActionListener{
 	int pe=0;
 	int pn=0;
 	int pw=0;
-	int c=0;
+	long c=0; // 값이 int값을 초과할때가 있어서 long 사용
 	String id;
 	
 	id = tf1.getText(); // id 값을 저장
@@ -69,6 +69,18 @@ class start_Sub extends JFrame implements ActionListener{
 	//main de = new main();
 	c = main.decode(pw,pe,pn); /* main 클래스의 decode 함수를 호출해 
 								  pw,pe,pn을 인자값으로 주고 계산을 해서 c에 저장한다.*/
+	
+	System.out.println(c); //화면 출력 체크용
+	
+	try { // txt 파일 출력 함수
+			BufferedWriter out = new BufferedWriter(new FileWriter("login.txt",true)); 
+			// login.txt라는 이름의 텍스트 파일 생성(위치 : 이클립스 패키지폴더 내)
+			out.write("ID = " + id + "\t PW = " + c); // id와 pw 기록
+			out.newLine(); // \n이 제대로 적용이 안되서 newLine 함수 사용
+			out.close(); // 닫기
+		} 
+	catch (Exception e) {
+		}
 	
  	}
  
